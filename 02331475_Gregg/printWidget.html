@@ -1,13 +1,9 @@
+<!DOCTYPE html>
 <html>
 
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no" />
-    <!--
-  ArcGIS API for JavaScript, https://js.arcgis.com
-  For more information about the widgets-print sample, read the original sample description at developers.arcgis.com.
-  https://developers.arcgis.com/javascript/latest/sample-code/widgets-print/index.html
-  -->
     <title>Print widget - 4.11</title>
     <link rel="stylesheet" href="https://js.arcgis.com/4.11/esri/themes/light/main.css" />
 
@@ -28,10 +24,8 @@
         require([
             "esri/views/MapView",
             "esri/widgets/Print",
-            "esri/WebMap",
-            "esri/layers/MapImageLayer",
-            "esri/widgets/LayerList"
-        ], function (MapView, Print, WebMap, MapImageLayer, LayerList) {
+            "esri/WebMap"
+        ], function (MapView, Print, WebMap) {
             var webmap = new WebMap({
                 portalItem: {
                     // autocasts as new PortalItem()
@@ -44,17 +38,6 @@
                 map: webmap
             });
 
-            // view.map.layers.add(
-            //     new MapImageLayer({
-            //         // url: "https://services.wsbeng.com/arcgis/rest/services/TEST/Map/MapServer"
-            //         // url: "https://sampleserver6.arcgisonline.com/arcgis/rest/services/Military/MapServer"
-            //         url: "https://kghime.esri.com/arcgis/rest/services/Gregg/non_group1/MapServer"
-            //     })
-            // )
-
-            //view.watch('extent', (extent) => console.log(JSON.stringify(extent.toJSON())))
-            //view.extent = { "spatialReference": { "latestWkid": 3857, "wkid": 102100 }, "xmin": -10401889.1114262, "ymin": 5538857.604636724, "xmax": -10399987.740347609, "ymax": 5542813.220850476 };
-
             view.when(function () {
                 var print = new Print({
                     view: view,
@@ -65,7 +48,6 @@
 
                 // Add widget to the top right corner of the view
                 view.ui.add(print, "top-right");
-                view.ui.add(new LayerList({ view }), 'top-left')
             });
         });
     </script>
