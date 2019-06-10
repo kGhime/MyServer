@@ -35,7 +35,7 @@
             var webmap = new WebMap({
                 portalItem: {
                     // autocasts as new PortalItem()
-                    id: "d6d830a7184f4971b8a2f42cd774d9a7"
+                    id: "7255f1466c0f45ad9a067c4a87e0b1eb"
                 }
             });
 
@@ -46,12 +46,13 @@
 
             view.map.layers.add(
                 new MapImageLayer({
-                    url: "https://services.wsbeng.com/arcgis/rest/services/TEST/Map/MapServer"
+                    // url: "https://services.wsbeng.com/arcgis/rest/services/TEST/Map/MapServer"
+                    url: "https://kghime.esri.com/arcgis/rest/services/Gregg/groupLayer1/MapServer"
                 })
             )
 
-            view.watch('extent', (extent) => console.log(JSON.stringify(extent.toJSON())))
-            view.extent = { "spatialReference": { "latestWkid": 3857, "wkid": 102100 }, "xmin": -10401889.1114262, "ymin": 5538857.604636724, "xmax": -10399987.740347609, "ymax": 5542813.220850476 };
+            //view.watch('extent', (extent) => console.log(JSON.stringify(extent.toJSON())))
+            //view.extent = { "spatialReference": { "latestWkid": 3857, "wkid": 102100 }, "xmin": -10401889.1114262, "ymin": 5538857.604636724, "xmax": -10399987.740347609, "ymax": 5542813.220850476 };
 
             view.when(function () {
                 var print = new Print({
@@ -63,7 +64,7 @@
 
                 // Add widget to the top right corner of the view
                 view.ui.add(print, "top-right");
-                view.ui.add(new LayerList({ view }), 'top-left')
+                //view.ui.add(new LayerList({ view }), 'top-left')
             });
         });
     </script>
