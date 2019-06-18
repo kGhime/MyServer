@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta
+      name="viewport"
+      content="initial-scale=1, maximum-scale=1,user-scalable=no"
+    />
+    <title>VectorTileLayer sample</title>
+    <link
+      rel="stylesheet"
+      href="https://js.arcgis.com/3.29/esri/css/esri.css"
+    />
+    <style>
+      html,
+      body,
+      #map {
+        height: 100%;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+    <script src="https://js.arcgis.com/3.29/"></script>
+    <script>
+      require([
+        "esri/map",
+        "esri/layers/VectorTileLayer",
+        "esri/dijit/BasemapLayer",
+        "dojo/domReady!"
+      ], function(Map, VectorTileLayer, BasemapLayer) {
+        var map = new Map("map", {
+          //basemap: "osm",
+          center: [-82.9988, 39.9612],
+          zoom: 10
+        });
+
+        var vtlayer = new BasemapLayer({
+          styleUrl:
+            "https://www.arcgis.com/sharing/rest/content/items/5ad3948260a147a993ef4865e3fad476/resources/styles/root.json",
+          type: "VectorTileLayer"
+        });
+
+        map.addLayer(vtlayer);
+      });
+    </script>
+  </head>
+
+  <body>
+    <div id="map"></div>
+  </body>
+</html>
