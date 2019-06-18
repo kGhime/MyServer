@@ -3,7 +3,7 @@ import os
 
 # Set output file names
 outdir = r"C:\Users\kavi9400\Documents\ArcGIS\Projects\MyProject4\Output"
-service = "MapServiceDraftExample"
+service = "MapServiceDraftExampleHiddenGL1"
 sddraft_filename = service + ".sddraft"
 sddraft_output_filename = os.path.join(outdir, sddraft_filename)
 
