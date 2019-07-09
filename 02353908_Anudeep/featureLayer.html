@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="initial-scale=1,maximum-scale=1,user-scalable=no"
+    />
+    <title>FeatureLayer</title>
+
+    <link
+      rel="stylesheet"
+      href="https://js.arcgis.com/3.29/esri/css/esri.css"
+    />
+    <script src="https://js.arcgis.com/3.29/"></script>
+
+    <style>
+      html,
+      body,
+      #map {
+        padding: 0;
+        margin: 0;
+        height: 100%;
+        width: 100%;
+      }
+    </style>
+
+    <script>
+      require([
+        "esri/map",
+        "esri/layers/FeatureLayer",
+        "esri/dijit/LayerList",
+        "esri/layers/ArcGISImageServiceLayer",
+        "dojo/domReady!"
+      ], function(Map, FeatureLayer, LayerList, ArcGISImageServiceLayer) {
+        var map = new Map("map", {
+          basemap: "hybrid",
+          center: [-90.049, 35.1495],
+          zoom: 12
+        });
+
+        var imageServiceLayer = new ArcGISImageServiceLayer(
+          "https://gis.shelbycountytn.gov/arcgis/rest/services/Imagery/Ortho2015/ImageServer"
+        );
+
+        map.addLayer(imageServiceLayer);
+      });
+    </script>
+  </head>
+
+  <body>
+    <div id="map"></div>
+
+    <div
+      id="layerListPane"
+      data-dojo-type="dijit/layout/ContentPane"
+      data-dojo-props="region:'right'"
+    >
+      <div id="layerList"></div>
+    </div>
+  </body>
+</html>

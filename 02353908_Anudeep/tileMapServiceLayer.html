@@ -4,51 +4,201 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta
       name="viewport"
-      content="initial-scale=1, maximum-scale=1, user-scalable=no"
+      content="initial-scale=1, maximum-scale=1,user-scalable=no"
     />
-    <title>Tiled map service</title>
+    <title>Layer List Dijit</title>
+    <link
+      rel="stylesheet"
+      href="https://js.arcgis.com/3.29/dijit/themes/claro/claro.css"
+    />
     <link
       rel="stylesheet"
       href="https://js.arcgis.com/3.29/esri/css/esri.css"
     />
+
     <style>
       html,
       body,
+      .container,
       #map {
         height: 100%;
         width: 100%;
         margin: 0;
         padding: 0;
+        margin: 0;
+        font-family: "Open Sans";
+      }
+      #map {
+        padding: 0;
+      }
+      #layerListPane {
+        width: 25%;
+      }
+      .esriLayer {
+        background-color: #fff;
+      }
+      .esriLayerList .esriList {
+        border-top: none;
+      }
+      .esriLayerList .esriTitle {
+        background-color: #fff;
+        border-bottom: none;
+      }
+      .esriLayerList .esriList ul {
+        background-color: #fff;
       }
     </style>
-
+    <script>
+      var dojoConfig = { parseOnLoad: true };
+    </script>
     <script src="https://js.arcgis.com/3.29/"></script>
     <script>
-      var map;
-
       require([
         "esri/map",
+        "esri/arcgis/utils",
+        "esri/dijit/LayerList",
+        "dijit/layout/BorderContainer",
+        "dijit/layout/ContentPane",
         "esri/layers/ArcGISTiledMapServiceLayer",
-        "esri/geometry/Point",
-        "esri/SpatialReference",
+        "esri/layers/FeatureLayer",
+        "esri/layers/ArcGISImageServiceLayer",
         "dojo/domReady!"
-      ], function(Map, ArcGISTiledMapServiceLayer, Point, SpatialReference) {
+      ], function(
+        Map,
+        arcgisUtils,
+        LayerList,
+        ArcGISTiledMapServiceLayer,
+        FeatureLayer,
+        ArcGISImageServiceLayer
+      ) {
         map = new Map("map", {
-          center: new Point(
-            1714791.187457787,
-            2194882.166227445,
-            new SpatialReference({ wkid: 5936 })
-          )
+          basemap: "hybrid", //For full list of pre-defined basemaps, navigate to http://arcg.is/1JVo6Wd
+          center: [-90.049, 35.1495], // longitude, latitude
+          zoom: 10
         });
 
-        var tiled = new ArcGISTiledMapServiceLayer(
-          "https://services.arcgisonline.com/arcgis/rest/services/Polar/Arctic_Imagery/MapServer"
+        var imageServiceLayer1 = new ArcGISImageServiceLayer(
+          "https://gis.shelbycountytn.gov/arcgis/rest/services/Imagery/Ortho1938/ImageServer"
         );
-        map.addLayer(tiled);
+        var imageServiceLayer2 = new ArcGISImageServiceLayer(
+          "https://gis.shelbycountytn.gov/arcgis/rest/services/Imagery/Ortho1949/ImageServer"
+        );
+        var imageServiceLayer3 = new ArcGISImageServiceLayer(
+          "https://gis.shelbycountytn.gov/arcgis/rest/services/Imagery/Ortho1962/ImageServer"
+        );
+        var imageServiceLayer4 = new ArcGISImageServiceLayer(
+          "https://gis.shelbycountytn.gov/arcgis/rest/services/Imagery/Ortho1971/ImageServer"
+        );
+        var imageServiceLayer5 = new ArcGISImageServiceLayer(
+          "https://gis.shelbycountytn.gov/arcgis/rest/services/Imagery/Ortho1981/ImageServer"
+        );
+        var imageServiceLayer6 = new ArcGISImageServiceLayer(
+          "https://gis.shelbycountytn.gov/arcgis/rest/services/Imagery/Ortho1990/ImageServer"
+        );
+        var imageServiceLayer7 = new ArcGISImageServiceLayer(
+          "https://gis.shelbycountytn.gov/arcgis/rest/services/Imagery/Ortho2008/ImageServer"
+        );
+        var imageServiceLayer8 = new ArcGISImageServiceLayer(
+          "https://gis.shelbycountytn.gov/arcgis/rest/services/Imagery/Ortho2010/ImageServer"
+        );
+        var imageServiceLayer9 = new ArcGISImageServiceLayer(
+          "https://gis.shelbycountytn.gov/arcgis/rest/services/Imagery/Ortho2012/ImageServer"
+        );
+        var imageServiceLayer10 = new ArcGISImageServiceLayer(
+          "https://gis.shelbycountytn.gov/arcgis/rest/services/Imagery/Ortho2013/ImageServer"
+        );
+        var imageServiceLayer11 = new ArcGISImageServiceLayer(
+          "https://gis.shelbycountytn.gov/arcgis/rest/services/Imagery/Ortho2015/ImageServer"
+        );
+        var imageServiceLayer12 = new ArcGISImageServiceLayer(
+          "https://gis.shelbycountytn.gov/arcgis/rest/services/Imagery/Ortho2017/ImageServer"
+        );
+
+        map.addLayers([
+          imageServiceLayer1,
+          imageServiceLayer2,
+          imageServiceLayer3,
+          imageServiceLayer4,
+          imageServiceLayer5,
+          imageServiceLayer6,
+          imageServiceLayer7,
+          imageServiceLayer8,
+          imageServiceLayer9,
+          imageServiceLayer10,
+          imageServiceLayer11,
+          imageServiceLayer12
+        ]);
+
+        var layerList = new LayerList(
+          {
+            map: map,
+            // showLegend: true,
+            // showSubLayers: true,
+            // showOpacitySlider: true,
+            layers: [
+              {
+                layer: imageServiceLayer1
+              },
+              {
+                layer: imageServiceLayer2
+              },
+              {
+                layer: imageServiceLayer3
+              },
+              {
+                layer: imageServiceLayer4
+              },
+              {
+                layer: imageServiceLayer5
+              },
+              {
+                layer: imageServiceLayer6
+              },
+              {
+                layer: imageServiceLayer7
+              },
+              {
+                layer: imageServiceLayer8
+              },
+              {
+                layer: imageServiceLayer9
+              },
+              {
+                layer: imageServiceLayer10
+              },
+              {
+                layer: imageServiceLayer11
+              },
+              {
+                layer: imageServiceLayer12
+              }
+            ]
+          },
+          "layerList"
+        );
+
+        layerList.startup();
       });
     </script>
   </head>
-  <body>
-    <div id="map"></div>
+  <body class="claro">
+    <div
+      class="container"
+      data-dojo-type="dijit/layout/BorderContainer"
+      data-dojo-props="design:'headline',gutters:false"
+    >
+      <div
+        id="layerListPane"
+        data-dojo-type="dijit/layout/ContentPane"
+        data-dojo-props="region:'right'"
+      >
+        <div id="layerList"></div>
+      </div>
+      <div
+        id="map"
+        data-dojo-type="dijit/layout/ContentPane"
+        data-dojo-props="region:'center'"
+      ></div>
+    </div>
   </body>
 </html>
