@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="initial-scale=1, maximum-scale=1,user-scalable=no"
+    />
+    <title>LayerList widget - 4.12</title>
+
+    <link
+      rel="stylesheet"
+      href="https://js.arcgis.com/4.12/esri/themes/light/main.css"
+    />
+
+    <style>
+      html,
+      body,
+      #viewDiv {
+        padding: 0;
+        margin: 0;
+        height: 100%;
+        width: 100%;
+        overflow: hidden;
+      }
+    </style>
+
+    <script src="https://js.arcgis.com/4.12/"></script>
+
+    <script>
+      require([
+        "esri/views/SceneView",
+        "esri/Map",
+        "esri/views/MapView",
+        "esri/widgets/LayerList",
+        "esri/layers/ImageryLayer",
+        "esri/WebScene"
+      ], function(SceneView, Map, MapView, LayerList, ImageryLayer, WebScene) {
+        var imageServiceLayer1 = new ImageryLayer(
+          "https://gis.shelbycountytn.gov/arcgis/rest/services/Imagery/Ortho1938/ImageServer"
+        );
+        var imageServiceLayer2 = new ImageryLayer(
+          "https://gis.shelbycountytn.gov/arcgis/rest/services/Imagery/Ortho1949/ImageServer"
+        );
+        var imageServiceLayer3 = new ImageryLayer(
+          "https://gis.shelbycountytn.gov/arcgis/rest/services/Imagery/Ortho1962/ImageServer"
+        );
+        var imageServiceLayer4 = new ImageryLayer(
+          "https://gis.shelbycountytn.gov/arcgis/rest/services/Imagery/Ortho1971/ImageServer"
+        );
+        var imageServiceLayer5 = new ImageryLayer(
+          "https://gis.shelbycountytn.gov/arcgis/rest/services/Imagery/Ortho1981/ImageServer"
+        );
+        var imageServiceLayer6 = new ImageryLayer(
+          "https://gis.shelbycountytn.gov/arcgis/rest/services/Imagery/Ortho1990/ImageServer"
+        );
+        var imageServiceLayer7 = new ImageryLayer(
+          "https://gis.shelbycountytn.gov/arcgis/rest/services/Imagery/Ortho2008/ImageServer"
+        );
+        var imageServiceLayer8 = new ImageryLayer(
+          "https://gis.shelbycountytn.gov/arcgis/rest/services/Imagery/Ortho2010/ImageServer"
+        );
+        var imageServiceLayer9 = new ImageryLayer(
+          "https://gis.shelbycountytn.gov/arcgis/rest/services/Imagery/Ortho2012/ImageServer"
+        );
+        var imageServiceLayer10 = new ImageryLayer(
+          "https://gis.shelbycountytn.gov/arcgis/rest/services/Imagery/Ortho2013/ImageServer"
+        );
+        var imageServiceLayer11 = new ImageryLayer(
+          "https://gis.shelbycountytn.gov/arcgis/rest/services/Imagery/Ortho2015/ImageServer"
+        );
+        var imageServiceLayer12 = new ImageryLayer(
+          "https://gis.shelbycountytn.gov/arcgis/rest/services/Imagery/Ortho2017/ImageServer"
+        );
+
+        var map = new Map({
+          basemap: "streets",
+          layers: [
+            imageServiceLayer1,
+            imageServiceLayer2,
+            imageServiceLayer3,
+            imageServiceLayer4,
+            imageServiceLayer5,
+            imageServiceLayer6,
+            imageServiceLayer7,
+            imageServiceLayer8,
+            imageServiceLayer9,
+            imageServiceLayer10,
+            imageServiceLayer11,
+            imageServiceLayer12
+          ]
+        });
+
+        var view = new MapView({
+          container: "viewDiv",
+          map: map,
+          center: [-90.0490, 35.1495],
+          zoom: 11
+        });
+
+        view.when(function() {
+          var layerList = new LayerList({
+            view: view
+          });
+
+          // Add widget to the top right corner of the view
+          view.ui.add(layerList, "top-right");
+        });
+      });
+    </script>
+  </head>
+
+  <body class="calcite">
+    <div id="viewDiv"></div>
+  </body>
+</html>
