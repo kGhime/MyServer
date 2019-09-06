@@ -10,9 +10,9 @@
 
     <link
       rel="stylesheet"
-      href="https://js.arcgis.com/3.20/esri/css/esri.css"
+      href="https://js.arcgis.com/3.29/esri/css/esri.css"
     />
-    <script src="https://js.arcgis.com/3.20/"></script>
+    <script src="https://js.arcgis.com/3.29/"></script>
 
     <style>
       html,
@@ -34,7 +34,7 @@
         var map = new Map("map", {
           basemap: "topo",
           center: [-119.4179, 36.7783],
-          zoom: 4
+          zoom: 9
         });
 
         /****************************************************************
@@ -45,9 +45,10 @@
 
         // Carbon storage of trees in Warren Wilson College.
         var featureLayer = new FeatureLayer(
-          "https://sampleserver3.arcgisonline.com/ArcGIS/rest/services/SanFrancisco/311Incidents/FeatureServer/0"
+          "https://supt0009877.esri.com:6443/arcgis/rest/services/pointFeature1/FeatureServer/0"
         );
-
+        //https://supt0009877.esri.com:6443/arcgis/rest/services/pointFeature1/FeatureServer
+        //https://sampleserver3.arcgisonline.com/ArcGIS/rest/services/SanFrancisco/311Incidents/FeatureServer/0
         map.addLayer(featureLayer);
       });
     </script>

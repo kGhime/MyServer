@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Sublayer Test</title>
+
+    <style>
+      html,
+      body,
+      #mapView {
+        padding: 0;
+        margin: 0;
+        height: 100%;
+        width: 100%;
+      }
+    </style>
+
+    <link
+      rel="stylesheet"
+      href="https://js.arcgis.com/4.12/esri/themes/light/main.css?a=1"
+    />
+    <script src="https://js.arcgis.com/4.12/"></script>
+
+    <script>
+      require([
+        "esri/Map",
+        "esri/views/MapView",
+        "esri/layers/MapImageLayer",
+        "esri/geometry/Extent",
+        "esri/geometry/SpatialReference",
+        "esri/layers/GroupLayer",
+        "dojo/domReady!"
+      ], function(
+        Map,
+        MapView,
+        MapImageLayer,
+        Extent,
+        SpatialReference,
+        GroupLayer
+      ) {
+        var layer = new MapImageLayer({
+          url:
+            "https://kghime.esri.com/arcgis/rest/services/Sublayer_Visibility/sublayerVisibility5/MapServer",
+          //changing this sublayer value to a sublayer within a sublayer does not load the data
+          sublayers: [
+            {
+              id: 1,
+              visible: true
+            },
+            {
+              id: 2,
+              visible: true
+            },
+            {
+              id: 3,
+              visible: true
+            },
+            {
+              id: 4,
+              visible: true
+            }
+          ]
+        });
+
+        var map = new Map({
+          layers: [layer],
+          basemap: "osm"
+        });
+
+        var mapview = new MapView({
+          container: "mapView",
+          map: map,
+          center: [13.5668, 7.3381],
+          zoom: 7
+          //   extent: new Extent({
+          //     xmin: -124.94819881359844,
+          //     ymin: 35.74345383070381,
+          //     xmax: -113.6418388992984,
+          //     ymax: 43.04777972539275,
+          //     spatialReference: new SpatialReference(4326)
+          //   })
+        });
+
+        /* layer.when(function () {
+                layer.sublayers = [
+                    {
+                        id: 5,
+                        visible: false
+                    },
+                    {
+                        id: 4,
+                        visible: true
+                    }
+                    ,
+                    {
+                        id: 3,
+                        visible: true
+                    }
+                    ,
+                    {
+                        id: 2,
+                        visible: true
+                    },
+                    {
+                        id: 1,
+                        visible: false
+                    },
+                    {
+                        id: 0,
+                        visible: true
+                    }
+                ]
+            }); */
+      });
+    </script>
+  </head>
+
+  <body>
+    <div id="mapView"></div>
+  </body>
+</html>
+v
