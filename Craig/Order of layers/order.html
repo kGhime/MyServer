@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <meta charset="utf-8" />
+    <link
+      rel="stylesheet"
+      href="https://js.arcgis.com/3.28/esri/css/esri.css"
+    />
+    <script src="https://js.arcgis.com/3.28/"></script>
+    <script type="text/javascript">
+      dojo.require("esri.map");
+      dojo.require("esri.basemaps");
+      dojo.require("esri.Color");
+      dojo.require("esri.SpatialReference");
+      dojo.require("esri.geometry.ScreenPoint");
+      dojo.require("esri.geometry.Extent");
+      dojo.require("esri.geometry");
+      dojo.require("esri.symbols.Font");
+      dojo.require("esri.tasks.IdentifyTask");
+      dojo.require("esri.tasks.IdentifyParameters");
+      dojo.require("esri.layers.FeatureLayer");
+      dojo.require("esri.renderers.UniqueValueRenderer");
+      dojo.require("esri.symbols.SimpleLineSymbol");
+    </script>
+    <script>
+      serviceLayers = [];
+      var url,
+        svcLyr,
+        baseUrl = "",
+        basemapName = "",
+        baseLayers = "",
+        standardLyr = null,
+        standardUrl = "";
+      var spRef,
+        layer1Url = "",
+        layer2Url = "",
+        layer1Tiled = true,
+        layer2Tiled = true,
+        mapCenter,
+        baseNum = 0;
+      var visibleLayers1 = [];
+      var visibleLayers2 = [];
+
+      var mode = 2;
+
+      dojo.addOnLoad(function() {
+        switch (mode) {
+          case 1:
+            // Standard ArcGIS basemap with section-zone layer
+            // This works perfectly -- showing an additional layers from our dedicated server
+            // and an additional arcgis.com layer.
+            // As is, does not support any non-ESRI basemap.
+            basemapName = "streets-navigation-vector";
+            spRef = new esri.SpatialReference({ wkid: 102100 });
+            mapCenter = new esri.geometry.Point(
+              -17263933.529700905,
+              2239806.092044023,
+              spRef
+            );
+            layer1Url =
+              "https://maps.hawaiiinformation.com/maps/rest/services/REsearch_6/SectionsZones/MapServer";
+            layer2Url =
+              "https://services1.arcgis.com/8zEncYIWRcSKYebe/ArcGIS/rest/services/Administrative/FeatureServer/2"; // zip codes
+
+            break;
+          case 2:
+            // no base map, use "BaseStandard" service like a base map as the underlying layer
+            // but can't show an ESRI basemap.
+            // After cliking to set a basemap, bombs when zooming, probably because basemaps can't project on the fly.
+            spRef = new esri.SpatialReference({ wkid: 102463 });
+            mapCenter = new esri.geometry.Point(
+              2645853.738282827,
+              -518641.276400606,
+              spRef
+            );
+            layer1Url =
+              "https://maps.hawaiiinformation.com/maps/rest/services/REsearch_6/BaseStandard/MapServer";
+            layer2Url =
+              "https://services1.arcgis.com/8zEncYIWRcSKYebe/ArcGIS/rest/services/Administrative/FeatureServer/2"; // zip codes
+
+            break;
+          case 3:
+            // Try using "BaseStandard" as a custom basemap
+            // This fails altogether
+            baseUrl =
+              "https://maps.hawaiiinformation.com/maps/rest/services/REsearch_6/BaseStandard/MapServer";
+            basemapName = "standardBaseMap";
+            baseLayers = [0, 1, 2, 3, 4, 5];
+            spRef = new esri.SpatialReference({ wkid: 102463 });
+            mapCenter = new esri.geometry.Point(
+              2645853.738282827,
+              -518641.276400606,
+              spRef
+            );
+            break;
+          case 4:
+            // Standard ArcGIS basemap
+            // This works perfectly -- showing an additional layer from our dedicated server
+            // and an additional arcgis.com layer.
+            // Add a BaseStandard non-basemap layer that will act like a basemap by being the bottom layer covering up any true basemap.
+            basemapName = "streets-navigation-vector";
+            spRef = new esri.SpatialReference({ wkid: 102100 });
+            mapCenter = new esri.geometry.Point(
+              -17263933.529700905,
+              2239806.092044023,
+              spRef
+            );
+
+            standardUrl =
+              "https://maps.hawaiiinformation.com/maps/rest/services/REsearch_6/BaseStandard/MapServer";
+            layer1Url =
+              "https://maps.hawaiiinformation.com/maps/rest/services/REsearch_6/SectionsZones/MapServer";
+            layer2Url =
+              "https://services1.arcgis.com/8zEncYIWRcSKYebe/ArcGIS/rest/services/Administrative/FeatureServer/2"; // zip codes
+            break;
+          case 5:
+            // Standard ArcGIS basemap with flood zone layer from our map server
+            // Also a parcels layer.  As expected by the order of adding the layers, the parcels are on top of the flood zones
+            basemapName = "streets-navigation-vector";
+            spRef = new esri.SpatialReference({ wkid: 102100 });
+            mapCenter = new esri.geometry.Point(
+              -17263933.529700905,
+              2239806.092044023,
+              spRef
+            );
+            layer1Url =
+              "https://maps.hawaiiinformation.com/maps/rest/services/REsearch_6/Safety/MapServer";
+            visibleLayers1 = [5];
+            layer2Url =
+              "https://maps.hawaiiinformation.com/maps/rest/services/REsearch_6/Parcels/MapServer";
+            break;
+          case 6:
+            // Standard ArcGIS basemap with flood zone layer from an arcgis.com server
+            // Also a parcels layer.
+            // As NOT expected by the order of adding the layers, the parcels are still there but covered by the flood zones
+            // If you zoom in/out, you can momentarily see parcels, but then the flood comes.
+            basemapName = "streets-navigation-vector";
+            spRef = new esri.SpatialReference({ wkid: 102100 });
+            mapCenter = new esri.geometry.Point(
+              -17263933.529700905,
+              2239806.092044023,
+              spRef
+            );
+            layer1Url =
+              "https://services1.arcgis.com/8zEncYIWRcSKYebe/ArcGIS/rest/services/Safety/FeatureServer/1";
+            layer2Url =
+              "https://maps.hawaiiinformation.com/maps/rest/services/REsearch_6/Parcels/MapServer";
+            break;
+        }
+
+        if (baseUrl != "") {
+          esri.basemaps.standardBaseMap = {
+            title: "My custom basemap",
+            itemId: "standard",
+            baseMapLayers: [
+              {
+                url: baseUrl,
+                visibleLayers: baseLayers
+              }
+            ]
+          };
+        }
+
+        map = new esri.Map("map");
+        map.SpatialReference = spRef;
+        if (basemapName != "") map.setBasemap(basemapName);
+
+        map.on("load", function() {
+          map.centerAndZoom(mapCenter, 15); // just to center on where there is data
+        });
+        dojo.connect(map, "onClick", onClick);
+        //spRef = map.spaitialReference;
+        //map.spaitialReference = spRef;
+
+        if (standardUrl != "") {
+          standardLyr = new esri.layers.ArcGISDynamicMapServiceLayer(
+            standardUrl,
+            { id: "standard", visible: true }
+          );
+          map.addLayer(standardLyr);
+          standardLyr.hide();
+        }
+        if (layer1Url != "") {
+          if (layer1Url.indexOf("FeatureServer") < 0)
+            svcLyr = new esri.layers.ArcGISDynamicMapServiceLayer(layer1Url, {
+              id: "L1",
+              visible: true
+            });
+          else
+            svcLyr = new esri.layers.FeatureLayer(layer1Url, {
+              id: "L1",
+              visible: true
+            });
+          map.addLayer(svcLyr);
+          if (visibleLayers1.length > 0)
+            svcLyr.setVisibleLayers(visibleLayers1);
+          svcLyr.show();
+        }
+        if (layer2Url != "") {
+          if (layer2Url.indexOf("FeatureServer") < 0)
+            svcLyr = new esri.layers.ArcGISDynamicMapServiceLayer(layer2Url, {
+              id: "L2",
+              visible: true
+            });
+          else
+            svcLyr = new esri.layers.FeatureLayer(layer2Url, {
+              id: "L2",
+              visible: true
+            });
+          if (visibleLayers2.length > 0)
+            svcLyr.setVisibleLayers(visibleLayers2);
+          map.addLayer(svcLyr);
+          svcLyr.show();
+        }
+      });
+      function onClick(event) {
+        switch (++baseNum) {
+          case 1:
+            basemapName = "topo";
+            if (standardLyr) standardLyr.hide();
+            break;
+          case 2:
+            if (standardLyr) {
+              standardLyr.show();
+              return;
+            }
+          case 3:
+            basemapName = "streets-navigation-vector";
+            if (standardLyr) standardLyr.hide();
+            baseNum = 0;
+            break;
+        }
+        map.setBasemap(basemapName);
+
+        //map.setBasemap("standardBaseMap");
+        // just used to get a point to center on
+        var mapCenterAt = event.mapPoint;
+      }
+    </script>
+  </head>
+  <body
+    class="smart-style-2 fixed-header fixed-navigation fixed-ribbon unselectable claro"
+    id="SearchMap_@Model.InstanceId"
+    style="position: absolute; width: 100%; height:100%; padding: 0; margin: 0; overflow: hidden"
+  >
+    <div
+      id="map"
+      style="position: absolute; left: 0; right: 0; top:0; bottom: 0; border: 0"
+    ></div>
+  </body>
+</html>

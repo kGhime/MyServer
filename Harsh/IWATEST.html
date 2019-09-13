@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no"/>
+<title>Basic clustering on FeatureLayer</title>
+
+<link rel="stylesheet" href="https://js.arcgis.com/3.28/esri/css/esri.css">
+<script src="https://js.arcgis.com/3.28/"></script>
+
+<style>
+  html, body, #viewDiv {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+  }
+
+  #infoDiv{
+    top: 0px;
+    right: 0px;
+    position: absolute;
+    z-index: 2;
+    opacity: 0.9;
+    background-color: whitesmoke;
+    padding: 8px;
+    font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-size: 12px;
+  }
+</style>
+
+<script>
+  require([
+    "esri/map",
+    "esri/layers/FeatureLayer",
+    "esri/dijit/PopupTemplate","esri/config",
+    "esri/urlUtils","dojo/parser", 
+    "esri/dijit/Legend",
+    "dojo/domReady!"
+  ], function(Map, FeatureLayer, PopupTemplate,esriConfig,urlUtils, parser, Legend
+  ) {
+
+                
+
+  urlUtils.addProxyRule({
+  urlPrefix: "https://kghime.esri.com/arcgis/rest/services/",
+  proxyUrl: "https://kghime.esri.com/DotNet/proxy.ashx"
+  }); 
+
+
+
+    var map = new Map("viewDiv", {
+      basemap: "topo",
+      
+    });
+
+
+
+    var serviceUrl = "https://kghime.esri.com/arcgis/rest/services/Hosted/securedCounties/FeatureServer/0"
+    var layer = new FeatureLayer(serviceUrl);
+    map.addLayer(layer);
+    map.on("click", function(){
+     return console.log(map.getZoom());
+    });
+    
+
+    
+
+  });
+
+</script>
+
+</head>
+
+<body>
+  <div id="viewDiv"></div>
+  <div id="infoDiv">
+    <div id="legendDiv"></div>
+  </div>
+</body>
+
+</html>

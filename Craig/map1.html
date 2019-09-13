@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <meta charset="utf-8" />
+    <link
+      rel="stylesheet"
+      href="https://js.arcgis.com/3.29/esri/css/esri.css"
+    />
+    <script src="https://js.arcgis.com/3.29/"></script>
+    <script type="text/javascript">
+      dojo.require("esri.map");
+      dojo.require("esri.basemaps");
+      dojo.require("esri.Color");
+      dojo.require("esri.SpatialReference");
+      dojo.require("esri.geometry.ScreenPoint");
+      dojo.require("esri.geometry.Extent");
+      dojo.require("esri.geometry");
+      dojo.require("esri.symbols.Font");
+      dojo.require("esri.tasks.IdentifyTask");
+      dojo.require("esri.tasks.IdentifyParameters");
+      dojo.require("esri.layers.FeatureLayer");
+      dojo.require("esri.renderers.UniqueValueRenderer");
+      dojo.require("esri.symbols.SimpleLineSymbol");
+    </script>
+    <script>
+      serviceLayers = [];
+      var customOnLoadFunctions = {};
+      var url,
+        svcLyr,
+        baseUrl = "",
+        basemapName = "",
+        baseLayers = "",
+        spRef,
+        layer1Url = "",
+        layer2Url = "",
+        mapCenter;
+
+      dojo.addOnLoad(function() {
+        var mode = 1;
+
+        switch (mode) {
+          case 1:
+            // Standard ArcGIS basemap with section-zone layer
+            // This works perfectly -- showing an additional layers from our dedicated server
+            basemapName = "streets-navigation-vector";
+            spRef = new esri.SpatialReference({ wkid: 102100 });
+            mapCenter = new esri.geometry.Point(
+              -17263933.529700905,
+              2239806.092044023,
+              spRef
+            );
+            layer1Url =
+              "https://maps.hawaiiinformation.com/maps/rest/services/REsearch_6/SectionsZones/MapServer";
+            layer2Url =
+              "https://maps.hawaiiinformation.com/maps/rest/services/REsearch_6/ZipCodes/MapServer";
+            // Adding this arcgis layer fails, and yet using this url in a browser will show the layer on ArcGIS online
+            // layer2Url = "https://services1.arcgis.com/8zEncYIWRcSKYebe/ArcGIS/rest/services/Administrative/FeatureServer/2"; // zip codes
+
+            break;
+          case 2:
+            // no base map, use "BaseStandard" service like a base map as the underlying layer
+            spRef = new esri.SpatialReference({ wkid: 102463 });
+            mapCenter = new esri.geometry.Point(
+              2645853.738282827,
+              -518641.276400606,
+              spRef
+            );
+            layer1Url =
+              "https://maps.hawaiiinformation.com/maps/rest/services/REsearch_6/BaseStandard/MapServer";
+            // This works as a 2nd layer
+            layer2Url =
+              "https://maps.hawaiiinformation.com/maps/rest/services/REsearch_6/ZipCodes/MapServer";
+            // This fails, and yet using this url in a browser will show the layer on ArcGIS online
+            // However, in another app, I think I'm doing the same thing as this and it works.
+            //layer2Url = "https://services1.arcgis.com/8zEncYIWRcSKYebe/ArcGIS/rest/services/Administrative/FeatureServer/2"; // zip codes
+
+            break;
+          case 3:
+            // Try using "BaseStandard" as a custom basemap
+            // This fails altogether
+            baseUrl =
+              "https://maps.hawaiiinformation.com/maps/rest/services/REsearch_6/BaseStandard/MapServer";
+            basemapName = "standardBaseMap";
+            baseLayers = [0, 1, 2, 3, 4, 5];
+            spRef = new esri.SpatialReference({ wkid: 102463 });
+            mapCenter = new esri.geometry.Point(
+              2645853.738282827,
+              -518641.276400606,
+              spRef
+            );
+            break;
+          case 4:
+            break;
+        }
+
+        if (baseUrl != "") {
+          esri.basemaps.standardBaseMap = {
+            title: "My custom basemap",
+            itemId: "standard",
+            baseMapLayers: [
+              {
+                url: baseUrl,
+                visibleLayers: baseLayers
+              }
+            ]
+          };
+        }
+
+        map = new esri.Map("map");
+        if (basemapName != "") map.setBasemap(basemapName);
+
+        map.on("load", function() {
+          map.centerAndZoom(mapCenter, 15); // just to center on where there is data
+        });
+        dojo.connect(map, "onClick", onClick);
+        //spRef = map.spaitialReference;
+        //map.spaitialReference = spRef;
+
+        if (layer1Url != "") {
+          svcLyr = new esri.layers.ArcGISDynamicMapServiceLayer(layer1Url, {
+            id: "L1",
+            visible: true
+          });
+          map.addLayer(svcLyr);
+          svcLyr.show();
+        }
+        if (layer2Url != "") {
+          svcLyr = new esri.layers.ArcGISDynamicMapServiceLayer(layer2Url, {
+            id: "L2",
+            visible: true
+          });
+          map.addLayer(svcLyr);
+          svcLyr.show();
+        }
+      });
+      function onClick(event) {
+        //map.setBasemap("standardBaseMap");
+        // just used to get a point to center on
+        var mapCenterAt = event.mapPoint;
+      }
+    </script>
+  </head>
+  <body
+    class="smart-style-2 fixed-header fixed-navigation fixed-ribbon unselectable claro"
+    id="SearchMap_@Model.InstanceId"
+    style="position: absolute; width: 100%; height:100%; padding: 0; margin: 0; overflow: hidden"
+  >
+    <div
+      id="map"
+      style="position: absolute; left: 0; right: 0; top:0; bottom: 0; border: 0"
+    ></div>
+  </body>
+</html>
