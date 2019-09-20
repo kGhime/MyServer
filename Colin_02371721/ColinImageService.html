@@ -70,8 +70,8 @@
 
         params.fromGeometry = JSON.stringify({
           type: "Polygon",
-          rings: geometry.rings,
-          spatialReference: spatialReference
+          //rings: geometry.rings,
+          spatialReference: 102100
         });
 
         params.toGeometry = null;
@@ -86,11 +86,11 @@
         params.operation =
           ImageServiceMeasureParameters.OPERATION_AREA_PERIMETER;
 
-        params.linearUnit = linearUnit;
+        params.linearUnit = "esriKilometers";
 
         params.angularUnit = "esriDURadians";
 
-        params.areaUnit = areaUnit;
+        params.areaUnit = "esriSquareInches ";
 
         params.mosaicRule = null;
 
@@ -105,8 +105,6 @@
             result.resolve(null);
           }
         );
-
-        
       });
     </script>
   </head>
