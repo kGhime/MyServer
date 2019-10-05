@@ -20,7 +20,6 @@
         "esri/layers/FeatureLayer",
         "esri/layers/ArcGISDynamicMapServiceLayer",
         "esri/layers/VectorTileLayer",
-        "esri/dijit/LayerList",
         "dojo/domReady!"
       ], function(
         Map,
@@ -29,8 +28,7 @@
         Geometry,
         FeatureLayer,
         ArcGISDynamicMapServiceLayer,
-        VectorTileLayer,
-        LayerList
+        VectorTileLayer
       ) {
         var url,
           svcLyr0 = null,
@@ -93,7 +91,8 @@
 
         if (layer1Url != "") {
           if (layer1Url.indexOf("FeatureServer") < 0)
-            svcLyr1 = new ArcGISDynamicMapServiceLayer(layer1Url, {
+            //svcLyr1 = new ArcGISDynamicMapServiceLayer(layer1Url, {
+            svcLyr1 = new FeatureLayer(layer1Url, {
               id: "L1",
               visible: true
             });
@@ -103,7 +102,8 @@
         }
         if (layer2Url != "") {
           if (layer2Url.indexOf("FeatureServer") < 0)
-            svcLyr2 = new ArcGISDynamicMapServiceLayer(layer2Url, {
+            //svcLyr2 = new ArcGISDynamicMapServiceLayer(layer2Url, {
+            svcLyr2 = new FeatureLayer(layer2Url, {
               id: "L2",
               visible: true
             });
@@ -122,33 +122,6 @@
           // map.reorderLayer(svcLyr1, 0);
           map.centerAndZoom(mapCenter, 15); // just to center on where there is data
         });
-
-
-
-
-        var layerList = new LayerList(
-          {
-            map: map,
-            // showLegend: true,
-            // showSubLayers: true,
-            // showOpacitySlider: true,
-            layers: [
-              {
-                layer: layer1Url
-              },
-              {
-                layer: layer2Url
-              }
-              
-            ]
-          },
-          "layerList"
-        );
-
-        layerList.startup();
-
-
-
       });
     </script>
   </head>
@@ -157,15 +130,9 @@
     id="SearchMap_@Model.InstanceId"
     style="position: absolute; width: 100%; height:100%; padding: 0; margin: 0; overflow: hidden"
   >
-
-  <div>
-    <div id="map"
-    ></div>
-    <div id="layerList"></div>
-  </div>
-    <!-- <div
+    <div
       id="map"
       style="position: absolute; left: 0; right: 0; top:0; bottom: 0; border: 0"
-    ></div> -->
+    ></div>
   </body>
 </html>

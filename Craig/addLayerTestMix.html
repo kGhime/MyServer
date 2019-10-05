@@ -1,149 +1,59 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-
+    <meta charset="utf-8" />
     <meta
       name="viewport"
-      content="initial-scale=1, maximum-scale=1,user-scalable=no"
+      content="initial-scale=1,maximum-scale=1,user-scalable=no"
     />
-    <title>Simple Image Service</title>
+    <title>FeatureLayer</title>
+
     <link
       rel="stylesheet"
       href="https://js.arcgis.com/3.29/esri/css/esri.css"
     />
+    <script src="https://js.arcgis.com/3.29/"></script>
 
     <style>
       html,
       body,
       #map {
+        padding: 0;
+        margin: 0;
         height: 100%;
         width: 100%;
-        margin: 0;
-        padding: 0;
       }
     </style>
 
-    <script src="https://js.arcgis.com/3.29/"></script>
     <script>
-      var map;
       require([
         "esri/map",
-        "esri/layers/ArcGISImageServiceLayer",
         "esri/layers/FeatureLayer",
         "esri/layers/ArcGISDynamicMapServiceLayer",
-        "esri/layers/ImageServiceParameters",
-        "esri/dijit/LayerList",
-        "dojo/parser",
         "dojo/domReady!"
-      ], function(
-        Map,
-        ArcGISImageServiceLayer,
-        ArcGISDynamicMapServiceLayer,
-        FeatureLayer,
-        ImageServiceParameters,
-        LayerList,
-        parser
-      ) {
-        parser.parse();
-
-        map = new Map("map", {
-          basemap: "topo",
-          center: [-118.4912, 34.0195],
-          zoom: 7
+      ], function(Map, FeatureLayer, ArcGISDynamicMapServiceLayer) {
+        var map = new Map("map", {
+          basemap: "hybrid",
+          center: [-119.4179, 36.7783],
+          zoom: 6
         });
 
         var featureLayer = new FeatureLayer(
-          "https://kghime.esri.com/arcgis/rest/services/LayerOrder/layerOrdering/FeatureServer/1"
-        );
-        // var mapLayer = new ArcGISDynamicMapServiceLayer(
-        //   "https://kghime.esri.com/arcgis/rest/services/LayerOrder/layerOrdering/MapServer/2",
-        //   {
-        //     opacity: 0.5
-        //   }
-        // );
-        // var imageServiceLayer3 = new FeatureLayer(
-        //   "https://kghime.esri.com/arcgis/rest/services/LayerOrder/layerOrdering/FeatureServer/0"
-        // );
-
-        // map.addLayers([
-        //   imageServiceLayer1,
-        //   imageServiceLayer2
-        //   //imageServiceLayer3
-        //   //imageServiceLayer4
-        //   //   imageServiceLayer5,
-        //   //   imageServiceLayer6,
-        //   //   imageServiceLayer7,
-        //   //   imageServiceLayer8,
-        //   //   imageServiceLayer9,
-        //   //   imageServiceLayer10,
-        //   //   imageServiceLayer11,
-        //   //   imageServiceLayer12
-        // ]);
-
-        map.addLayer(featureLayer);
-       // map.addLayer(mapLayer);
-        //map.addLayer(imageServiceLayer3);
-
-        //map.reorderLayer(imageServiceLayer3, 0);
-
-        var layerList = new LayerList(
-          {
-            map: map,
-            // showLegend: true,
-            // showSubLayers: true,
-            // showOpacitySlider: true,
-            layers: [
-              {
-                layer: featureLayer
-              }
-            //   {
-            //     layer: mapLayer
-            //   }
-              //   {
-              //     layer: imageServiceLayer3
-              //   }
-              //   {
-              //     layer: imageServiceLayer4
-              //   }
-              //   {
-              //     layer: imageServiceLayer5
-              //   },
-              //   {
-              //     layer: imageServiceLayer6
-              //   },
-              //   {
-              //     layer: imageServiceLayer7
-              //   },
-              //   {
-              //     layer: imageServiceLayer8
-              //   },
-              //   {
-              //     layer: imageServiceLayer9
-              //   },
-              //   {
-              //     layer: imageServiceLayer10
-              //   },
-              //   {
-              //     layer: imageServiceLayer11
-              //   },
-              //   {
-              //     layer: imageServiceLayer12
-              //   }
-            ]
-          },
-          "layerList"
+          "https://kghime.esri.com/arcgis/rest/services/LayerOrder/NewServiceLayerOrder/FeatureServer/2"
         );
 
-        layerList.startup();
+        var mapLayer = new ArcGISDynamicMapServiceLayer(
+          "https://kghime.esri.com/arcgis/rest/services/LayerOrder/NewServiceLayerOrder/MapServer/1"
+        );
+
+        //map.addLayers([mapLayer, featureLayer]);
+
+        map.addLayer(mapLayer);
       });
     </script>
   </head>
 
   <body>
-    <div>
-      <div id="map"></div>
-      <div id="layerList"></div>
-    </div>
+    <div id="map"></div>
   </body>
 </html>
