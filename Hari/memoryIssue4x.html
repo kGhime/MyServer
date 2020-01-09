@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="initial-scale=1,maximum-scale=1,user-scalable=no"
+    />
+    <title>Intro to FeatureLayer - 4.13</title>
+
+    <link
+      rel="stylesheet"
+      href="https://js.arcgis.com/4.13/esri/themes/light/main.css"
+    />
+    <script src="https://js.arcgis.com/4.13/"></script>
+
+    <style>
+      html,
+      body,
+      #viewDiv {
+        padding: 0;
+        margin: 0;
+        height: 100%;
+        width: 100%;
+      }
+    </style>
+
+    <script>
+      require([
+        "esri/Map",
+        "esri/views/MapView",
+        "esri/layers/FeatureLayer",
+        "esri/widgets/LayerList"
+      ], function(Map, MapView, FeatureLayer) {
+        var map = new Map({
+          basemap: "hybrid"
+        });
+
+        var view = new MapView({
+          container: "viewDiv",
+          map: map,
+          center: [-119.4179, 36.7783],
+          zoom: 6
+
+          // extent: {
+          //   // autocasts as new Extent()
+          //   xmin: -9177811,
+          //   ymin: 4247000,
+          //   xmax: -9176791,
+          //   ymax: 4247784,
+          //   spatialReference: 102100
+          // }
+        });
+
+        /********************
+         * Add feature layer
+         ********************/
+
+        // Carbon storage of trees in Warren Wilson College.
+        var featureLayer = new FeatureLayer({
+          // url:
+          //   "https://services.arcgis.com/V6ZHFr6zdgNZuVG0/arcgis/rest/services/Landscape_Trees/FeatureServer/0"
+          url:
+            "https://kghime.esri.com/server/rest/services/Hari_02426256/5k_PolygonsPerformance/FeatureServer/0"
+        });
+
+        map.add(featureLayer);
+
+        view.when(function() {
+          var layerList = new LayerList({
+            view: view
+          });
+
+          // Add widget to the top right corner of the view
+          view.ui.add(layerList, "top-right");
+        });
+      });
+    </script>
+  </head>
+
+  <body>
+    <div id="viewDiv"></div>
+  </body>
+</html>

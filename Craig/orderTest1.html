@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="initial-scale=1,maximum-scale=1,user-scalable=no"
+    />
+    <title>FeatureLayer</title>
+
+    <link
+      rel="stylesheet"
+      href="https://js.arcgis.com/3.29/esri/css/esri.css"
+    />
+    <script src="https://js.arcgis.com/3.29/"></script>
+
+    <style>
+      html,
+      body,
+      #map {
+        padding: 0;
+        margin: 0;
+        height: 100%;
+        width: 100%;
+      }
+    </style>
+
+    <script>
+      require([
+        "esri/map",
+        "esri/layers/FeatureLayer",
+        "esri/layers/ArcGISDynamicMapServiceLayer",
+        "dojo/domReady!"
+      ], function(Map, FeatureLayer, ArcGISDynamicMapServiceLayer) {
+        var map = new Map("map", {
+          basemap: "hybrid",
+          center: [-119.4179, 36.7783],
+          zoom: 6
+        });
+
+        var featureLayer = new FeatureLayer(
+          "https://kghime.esri.com/arcgis/rest/services/LayerOrder/NewServiceLayerOrder/FeatureServer/2"
+        );
+
+        var mapLayer = new FeatureLayer(
+          "https://kghime.esri.com/arcgis/rest/services/LayerOrder/NewServiceLayerOrder/MapServer/1"
+        );
+
+        map.addLayers([mapLayer, featureLayer]);
+
+        //map.addLayer(mapLayer);
+      });
+    </script>
+  </head>
+
+  <body>
+    <div id="map"></div>
+  </body>
+</html>
