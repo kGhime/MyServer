@@ -13,6 +13,9 @@
       href="https://js.arcgis.com/4.14/esri/themes/light/main.css"
     />
     <script src="https://js.arcgis.com/4.14/"></script>
+    
+    
+    <script type="text/javascript" src="./index.js"></script>
 
     <style>
       html,
@@ -26,43 +29,7 @@
     </style>
 
     <script>
-      require([
-        "esri/Map",
-        "esri/views/MapView",
-        "esri/layers/FeatureLayer"
-      ], function(Map, MapView, FeatureLayer) {
-        var map = new Map({
-          basemap: "hybrid"
-        });
-
-        var view = new MapView({
-          container: "viewDiv",
-          map: map,
-          center: [-119.4179, 36.7783],
-          zoom: 9
-
-          // extent: {
-          //   // autocasts as new Extent()
-          //   xmin: -9177811,
-          //   ymin: 4247000,
-          //   xmax: -9176791,
-          //   ymax: 4247784,
-          //   spatialReference: 102100
-          // }
-        });
-
-        /********************
-         * Add feature layer
-         ********************/
-
-        // Carbon storage of trees in Warren Wilson College.
-        var featureLayer = new FeatureLayer({
-          url:
-            "https://services.arcgis.com/V6ZHFr6zdgNZuVG0/arcgis/rest/services/Landscape_Trees/FeatureServer/0"
-        });
-
-        map.add(featureLayer);
-      });
+      console.log("test");
     </script>
   </head>
 
